@@ -1,1 +1,4 @@
 src/myapi/_version.py
+.coverage
+__pycache__
+myapi.egg-info

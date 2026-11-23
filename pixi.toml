@@ -1,8 +1,12 @@
 [workspace]
 name = "myapi"
 authors = ["Pablo Rodriguez Mira"]
+channels = ["conda-forge"]
 platforms = ["win-64", "linux-64"]
-exclude-newer = "7d"
+exclude-newer = "2026-11-23"
+
+[pypi-dependencies]
+myapi = { path = ".", editable = true }
 
 [dependencies]
 python = "3.14.*"

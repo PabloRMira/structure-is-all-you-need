@@ -1,5 +1,7 @@
-from pydantic import BaseModel, Field
 from enum import StrEnum
+
+from pydantic import BaseModel, Field
+
 
 class HealthStatusCode(StrEnum):
     UP = "UP"
