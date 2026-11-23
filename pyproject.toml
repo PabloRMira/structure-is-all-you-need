@@ -39,6 +39,8 @@ repository = "https://github.com/PabloRMira/structure-is-all-you-need"
 [tool.mypy]
 python_version = 3.14
 files = ["src/**/*.py"]
+mypy_path = "src"
+explicit_package_bases = true
 
 [tool.ruff]
 line-length = 100

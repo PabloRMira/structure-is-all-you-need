@@ -24,7 +24,7 @@ repos:
         name: mypy
         entry: pixi run mypy
         language: system
-        files: "^src/.*\.py$"
+        files: '^src/.*\.py$'
         args: ["--config-file=./pyproject.toml"]
         types_or: [python, pyi]
         require_serial: true
