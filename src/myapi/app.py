@@ -1,3 +1,5 @@
+from typing import Protocol
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -5,6 +7,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from myapi._version import __version__
 from myapi.api.api_v1.endpoints import get_endpoints
 from myapi.config import AppConfig, read_app_config
+
+
+class ServerRunner(Protocol):
+    """Starts a FastAPI app. The seam that lets tests inject a fake."""
+
+    def __call__(self, app: FastAPI, port: int) -> None: ...
 
 
 def get_app(config: AppConfig) -> FastAPI:
@@ -28,9 +36,15 @@ def get_app(config: AppConfig) -> FastAPI:
     return app
 
 
+def run_uvicorn(app: FastAPI, port: int) -> None:
+    uvicorn.run(app, port=port, reload=False)
+
+
+def start_server(config: AppConfig, run_server: ServerRunner = run_uvicorn) -> None:
+    app = get_app(config)
+    run_server(app, config.port)
+
+
 def run_app(config_path: str) -> None:
     config = read_app_config(config_path)
-
-    app = get_app(config)
-
-    uvicorn.run(app, port=config.port, reload=False)
+    start_server(config)

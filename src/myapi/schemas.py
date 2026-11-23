@@ -10,6 +10,6 @@ class HealthStatusCode(StrEnum):
 
 
 class HealthStatus(BaseModel):
-    "Health status of the API"
+    """Health status of the API."""
 
     status: HealthStatusCode = Field(description="Health status")

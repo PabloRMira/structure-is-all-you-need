@@ -1,12 +1,7 @@
-import json
-from pathlib import Path
-
 from fastapi import FastAPI
-from pytest import MonkeyPatch
 from starlette.middleware.cors import CORSMiddleware
 
-from myapi import app as app_module
-from myapi.app import get_app, run_app
+from myapi.app import get_app, start_server
 from myapi.config import AppConfig
 
 
@@ -40,21 +35,23 @@ def test_get_app_configures_cors_with_allowed_origins() -> None:
     assert cors.kwargs["allow_origins"] == ["https://allowed.example"]
 
 
-def test_run_app_reads_config_and_starts_server(tmp_path: Path, monkeypatch: MonkeyPatch) -> None:
-    config_path = tmp_path / "config.json"
-    config_path.write_text(json.dumps({"allow_origins": [], "port": 1234}), encoding="utf8")
+class RecordingRunner:
+    """Hand-written fake ServerRunner that records what it was called with."""
 
-    calls: dict[str, object] = {}
+    def __init__(self) -> None:
+        self.app: FastAPI | None = None
+        self.port: int | None = None
 
-    def fake_run(app: object, *, port: int, reload: bool) -> None:
-        calls["app"] = app
-        calls["port"] = port
-        calls["reload"] = reload
+    def __call__(self, app: FastAPI, port: int) -> None:
+        self.app = app
+        self.port = port
 
-    monkeypatch.setattr(app_module.uvicorn, "run", fake_run)
 
-    run_app(str(config_path))
+def test_start_server_builds_app_and_runs_on_configured_port() -> None:
+    config = AppConfig(allow_origins=[], port=1234)
+    runner = RecordingRunner()
 
-    assert isinstance(calls["app"], FastAPI)
-    assert calls["port"] == 1234
-    assert calls["reload"] is False
+    start_server(config, runner)
+
+    assert isinstance(runner.app, FastAPI)
+    assert runner.port == 1234

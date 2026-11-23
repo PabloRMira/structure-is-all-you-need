@@ -1573,8 +1573,8 @@ packages:
   timestamp: 1733255681319
 - pypi: ./
   name: myapi
-  version: 0.0.post1.dev3+g9324495f8.d20261123
-  sha256: e9b9387f7f5452aeeed571144d43b1334255f28e08fc41f96ada36623d06b3ad
+  version: 0.0.post1.dev4+geed412200.d20261123
+  sha256: dbfb57fa3d20580f2cc02bb2648c57084e61cea7c7a596b026f4862285d8f897
   requires_python: '>=3.14'
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/linux-64/mypy-2.4.1-py314hfe1a184_0.conda

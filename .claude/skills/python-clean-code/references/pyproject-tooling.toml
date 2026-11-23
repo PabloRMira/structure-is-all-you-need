@@ -1,0 +1,59 @@
+# Drop these blocks into your project's pyproject.toml.
+# Floor is Python 3.11 (StrEnum); bump target-version / python_version per project.
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+extend-exclude = [".claude"]  # skill docs; snippets are illustrative, not source
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes
+    "W",    # pycodestyle warnings
+    "I",    # isort (import ordering)
+    "N",    # pep8-naming
+    "UP",   # pyupgrade (modern syntax)
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "C4",   # flake8-comprehensions
+    "PTH",  # flake8-use-pathlib (no os.path)
+    "RET",  # flake8-return
+    "ARG",  # flake8-unused-arguments
+    "TID",  # flake8-tidy-imports
+    "RUF",  # ruff-specific rules
+    "D",    # pydocstyle (style of docstrings that exist)
+]
+# Docstrings are optional (good name + types beat a redundant sentence), so the
+# "missing docstring" rules are off. D still enforces google style on the
+# docstrings you DO write.
+ignore = [
+    "D100",  # missing docstring in public module
+    "D101",  # missing docstring in public class
+    "D102",  # missing docstring in public method
+    "D103",  # missing docstring in public function
+    "D104",  # missing docstring in public package
+    "D105",  # missing docstring in magic method
+    "D106",  # missing docstring in nested class
+    "D107",  # missing docstring in __init__
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests don't need docstring styling or unused-argument checks (fixtures).
+"tests/**" = ["D", "ARG"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+files = ["src/**/*.py"]
+mypy_path = "src"
+explicit_package_bases = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"

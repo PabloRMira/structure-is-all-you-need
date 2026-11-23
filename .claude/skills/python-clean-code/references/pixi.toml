@@ -1,0 +1,39 @@
+# pixi environment / dependency skeleton. Replace <package> with your package name.
+# Prod deps and dev-only tooling are split into features; prod and dev share a
+# solve-group so versions stay consistent.
+
+[workspace]
+name = "<package>"
+authors = ["Your Name"]
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64"]
+
+[pypi-dependencies]
+<package> = { path = ".", editable = true }
+
+[dependencies]
+python = "3.11.*"  # or newer
+pydantic = "*"
+loguru = "*"
+
+[feature.dev.dependencies]
+pytest = "*"
+pytest-cov = "*"
+ruff = "*"
+mypy = "*"
+pre-commit = "*"
+
+[environments]
+# prod: runtime deps only. default: prod + dev tooling, same solve-group.
+prod = { features = [], solve-group = "prod-group" }
+default = { features = ["dev"], solve-group = "prod-group" }
+
+[tasks]
+lint = "ruff check . && ruff format --check ."
+format = "ruff format ."
+typecheck = "mypy"
+# test tiers
+ptu = "pytest tests/unit"
+pti = "pytest tests/integration"
+pte = "pytest tests/end2end"
+check = "ruff format --check . && ruff check . && mypy && pytest"

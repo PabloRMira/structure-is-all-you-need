@@ -8,8 +8,7 @@ def get_endpoints() -> APIRouter:
 
     @router.get("/health")
     def check_health() -> HealthStatus:
-        "Check health status of the API"
-
+        """Check health status of the API."""
         return HealthStatus(status=HealthStatusCode.UP)
 
     return router
