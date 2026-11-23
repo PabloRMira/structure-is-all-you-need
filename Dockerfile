@@ -6,9 +6,20 @@ FROM ghcr.io/prefix-dev/pixi:latest AS build
 
 WORKDIR /app
 
+# `myapi` is installed editable, and its version is derived by setuptools-scm,
+# which shells out to the `git` binary at build time. The pixi base image ships
+# without git, so install it here (kept in its own layer for caching).
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the whole project. `.git` is intentionally kept (see .dockerignore) so
 # setuptools-scm can derive the package version during the editable install.
 COPY . .
+
+# `.git` was copied in as root-owned; mark it safe so git doesn't refuse to run
+# with a "dubious ownership" error during the setuptools-scm version lookup.
+RUN git config --global --add safe.directory /app
 
 # Install exactly what the lockfile pins for the production environment.
 RUN pixi install --locked -e myapi-prod
