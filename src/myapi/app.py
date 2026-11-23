@@ -37,7 +37,8 @@ def get_app(config: AppConfig) -> FastAPI:
 
 
 def run_uvicorn(app: FastAPI, port: int) -> None:
-    uvicorn.run(app, port=port, reload=False)
+    # Bind all interfaces so the server is reachable from outside its container.
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=False)
 
 
 def start_server(config: AppConfig, run_server: ServerRunner = run_uvicorn) -> None:
