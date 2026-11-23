@@ -1,0 +1,41 @@
+repos:
+  - repo: local
+    hooks:
+      - id: pixi-install
+        name: pixi-install
+        entry: pixi install -e default
+        language: system
+        always_run: true
+        require_serial: true
+        pass_filenames: false
+      - id: ruff
+        name: ruff
+        entry: pixi run ruff check --fix --exit-non-zero-on-fix --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: ruff-format
+        name: ruff-format
+        entry: pixi run ruff format --force-exclude
+        language: system
+        types_or: [python, pyi]
+        require_serial: true
+      - id: mypy
+        name: mypy
+        entry: pixi run mypy
+        language: system
+        files: "^src/.*\.py$"
+        args: ["--config-file=./pyproject.toml"]
+        types_or: [python, pyi]
+        require_serial: true
+      - id: trailing-whitespace-fixer
+        name: trailing-whitespace-fixer
+        entry: pixi run end-of-file-fixer
+        language: system
+        types: [text]
+      - id: mixed-line-ending-fixer
+        name: mixed-line-ending-fixer
+        entry: pixi run mixed-line-ending --fix=lf
+        language: system
+        types: [text]
+      

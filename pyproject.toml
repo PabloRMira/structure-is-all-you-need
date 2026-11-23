@@ -1,0 +1,39 @@
+[project]
+name = "myapi"
+dynamic = ["version"]
+description = "A standard API"
+authors = [{name = "Pablo Rodriguez Mira"}]
+requires-python = ">=3.14"
+classifiers = ["Programming Language :: Python :: 3.14"]
+readme = "README.md"
+
+[project.scripts]
+myapi = "myapi.main:main"
+
+[build-system]
+requires = ["setuptools", "setuptools-scm[simple]"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+version_scheme = "no-guess-dev"
+writes_to = "src/myapi/_version.py"
+
+[tool.coverage.run]
+source = ["myapi"]
+omit = ["**/myapi/_version.py"]
+
+[tool.coverage.report]
+include_namespace_package = true
+
+[project.urls]
+homepage = "https://github.com/PabloRMira/structure-is-all-you-need"
+repository = "https://github.com/PabloRMira/structure-is-all-you-need"
+
+[tool.mypy]
+python_version = 3.14
+files = ["src/**/*.py"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+src = ["src", "tests"]

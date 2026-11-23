@@ -1,0 +1,1 @@
+This repository contains the code for a standard API with documentation an presentation on putting emphasis on structure and first principles in order to be able to build high-quality software with modern tools like harnesses.
